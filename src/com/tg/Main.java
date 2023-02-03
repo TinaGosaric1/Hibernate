@@ -18,26 +18,23 @@ public class Main {
         Session session = factory.getCurrentSession();
 
         try {
-            // start a transaction
+            int studentId = 1;
+
             session.beginTransaction();
 
-            // query students
-            List<Student> theStudents = session.createQuery("from Student").getResultList();
+            // retrieve student based on the id: primary key
+            System.out.println("\nGetting student with id: " + studentId);
 
-            // display students
-            displayStudents(theStudents);
+            Student myStudent = session.get(Student.class, studentId);
 
-            // query students, use Java property name, not the column name
-            theStudents = session.createQuery("from Student s where s.firstName LIKE '%e%'").getResultList();
+            System.out.println("Updating student...");
+            myStudent.setFirstName("Eli");
 
-            // display students
-            System.out.println("\nStudents whose last name contains the letter e");
-            displayStudents(theStudents);
-
-            // commit transaction
+            // commit the transaction
             session.getTransaction().commit();
 
             System.out.println("Done!");
+
         } finally {
             factory.close();
         }
