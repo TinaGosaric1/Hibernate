@@ -14,25 +14,19 @@ public class Main {
                 .addAnnotatedClass(Student.class)
                 .buildSessionFactory();
 
-        // create session
-        Session session = factory.getCurrentSession();
-
         try {
             int studentId = 1;
 
+            Session session = factory.getCurrentSession();
             session.beginTransaction();
 
-            // retrieve student based on the id: primary key
-            System.out.println("\nGetting student with id: " + studentId);
+            // update email for all students
+            System.out.println("Update email for all students");
 
-            Student myStudent = session.get(Student.class, studentId);
-
-            System.out.println("Updating student...");
-            myStudent.setFirstName("Eli");
+            session.createQuery("update Student set email='student@gmail.com'").executeUpdate();
 
             // commit the transaction
             session.getTransaction().commit();
-
             System.out.println("Done!");
 
         } finally {
