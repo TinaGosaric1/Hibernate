@@ -11,35 +11,34 @@ public class Main {
         // create session factory
         SessionFactory factory = new Configuration()
                 .configure("hibernate.cfg.xml")
-                .addAnnotatedClass(Student.class)
+                .addAnnotatedClass(Instructor.class)
+                .addAnnotatedClass(InstructorDetail.class)
                 .buildSessionFactory();
 
-        try {
-            int studentId = 1;
+        // create session
+        Session session = factory.getCurrentSession();
 
-            Session session = factory.getCurrentSession();
+        try {
+            // create the objects
+            Instructor tempInstructor = new Instructor("Joel", "Doe", "joel.doe@email.com");
+            InstructorDetail tempInstructorDetail = new InstructorDetail("http://www.youtube.com", "Se druga aktivnost");
+
+            // associate the objects
+            tempInstructor.setInstructorDetail(tempInstructorDetail);
+
+            // start a transaction
             session.beginTransaction();
 
-            // retrieve student based on the id: primary key
-            System.out.println("\nGetting student with id: " + studentId);
+            // save the instructor, this will also save the details object because of CascadeType.ALL
+            session.save(tempInstructor);
 
-            Student myStudent = session.get(Student.class, studentId);
-
-            // delete the student
-            System.out.println("Deleting student: " + myStudent);
-            session.delete(myStudent);
-
-            // commit the transaction
+            // commit transaction
             session.getTransaction().commit();
+
             System.out.println("Done!");
         } finally {
             factory.close();
         }
     }
 
-    private static void displayStudents(List<Student> theStudents) {
-        for (Student tempStudent : theStudents) {
-            System.out.println(tempStudent);
-        }
-    }
 }
