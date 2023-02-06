@@ -4,8 +4,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import java.util.List;
-
 public class Main {
     public static void main(String[] args) {
         // create session factory
@@ -19,18 +17,20 @@ public class Main {
         Session session = factory.getCurrentSession();
 
         try {
-            // create the objects
-            Instructor tempInstructor = new Instructor("Joel", "Doe", "joel.doe@email.com");
-            InstructorDetail tempInstructorDetail = new InstructorDetail("http://www.youtube.com", "Se druga aktivnost");
-
-            // associate the objects
-            tempInstructor.setInstructorDetail(tempInstructorDetail);
-
             // start a transaction
             session.beginTransaction();
 
-            // save the instructor, this will also save the details object because of CascadeType.ALL
-            session.save(tempInstructor);
+            // get instructor by id
+            int theId = 10;
+            Instructor tempInstructor = session.get(Instructor.class, theId);
+            System.out.println("Found instructor: " + tempInstructor);
+
+            // delete the intructor
+            if (tempInstructor != null) {
+                System.out.println("Deleting: " + tempInstructor);
+                // Note: will ALSO delete associated "details" object because of CascadeType.ALL
+                session.delete(tempInstructor);
+            }
 
             // commit transaction
             session.getTransaction().commit();
