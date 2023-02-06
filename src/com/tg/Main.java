@@ -20,15 +20,18 @@ public class Main {
             Session session = factory.getCurrentSession();
             session.beginTransaction();
 
-            // update email for all students
-            System.out.println("Update email for all students");
+            // retrieve student based on the id: primary key
+            System.out.println("\nGetting student with id: " + studentId);
 
-            session.createQuery("update Student set email='student@gmail.com'").executeUpdate();
+            Student myStudent = session.get(Student.class, studentId);
+
+            // delete the student
+            System.out.println("Deleting student: " + myStudent);
+            session.delete(myStudent);
 
             // commit the transaction
             session.getTransaction().commit();
             System.out.println("Done!");
-
         } finally {
             factory.close();
         }
