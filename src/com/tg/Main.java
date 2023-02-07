@@ -20,23 +20,22 @@ public class Main {
             // start a transaction
             session.beginTransaction();
 
-            // get instructor by id
-            int theId = 10;
-            Instructor tempInstructor = session.get(Instructor.class, theId);
-            System.out.println("Found instructor: " + tempInstructor);
+            // get the instructor detail object
+            int theId = 2;
+            InstructorDetail tempInstructorDetail = session.get(InstructorDetail.class, theId);
 
-            // delete the intructor
-            if (tempInstructor != null) {
-                System.out.println("Deleting: " + tempInstructor);
-                // Note: will ALSO delete associated "details" object because of CascadeType.ALL
-                session.delete(tempInstructor);
-            }
+            System.out.println("tempInstructorDetail: " + tempInstructorDetail);
+            System.out.println("the associated instructor: " + tempInstructorDetail.getInstructor());
 
             // commit transaction
             session.getTransaction().commit();
 
             System.out.println("Done!");
+        } catch (Exception exc) {
+            exc.printStackTrace();
         } finally {
+            // handle connection leak issue
+            session.close();
             factory.close();
         }
     }
