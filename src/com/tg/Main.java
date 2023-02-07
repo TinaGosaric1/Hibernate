@@ -27,6 +27,11 @@ public class Main {
             System.out.println("tempInstructorDetail: " + tempInstructorDetail);
             System.out.println("the associated instructor: " + tempInstructorDetail.getInstructor());
 
+            // remove the associated object reference: break bi-directional link
+            tempInstructorDetail.getInstructor().setInstructorDetail(null);
+
+            session.delete(tempInstructorDetail);
+
             // commit transaction
             session.getTransaction().commit();
 
