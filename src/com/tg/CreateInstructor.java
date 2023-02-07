@@ -4,33 +4,31 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class Main {
+public class CreateInstructor {
     public static void main(String[] args) {
         // create session factory
         SessionFactory factory = new Configuration()
                 .configure("hibernate.cfg.xml")
                 .addAnnotatedClass(Instructor.class)
                 .addAnnotatedClass(InstructorDetail.class)
+                .addAnnotatedClass(Course.class)
                 .buildSessionFactory();
 
         // create session
         Session session = factory.getCurrentSession();
 
         try {
+            // create the objects
+            Instructor tempInstructor = new Instructor("Jenny", "Public", "jenny@luv2code.com");
+
+            InstructorDetail tempInstructorDetail = new InstructorDetail("www.youtube.com", "golf");
+
+            tempInstructor.setInstructorDetail(tempInstructorDetail);
+
             // start a transaction
             session.beginTransaction();
 
-            // get the instructor detail object
-            int theId = 2;
-            InstructorDetail tempInstructorDetail = session.get(InstructorDetail.class, theId);
-
-            System.out.println("tempInstructorDetail: " + tempInstructorDetail);
-            System.out.println("the associated instructor: " + tempInstructorDetail.getInstructor());
-
-            // remove the associated object reference: break bi-directional link
-            tempInstructorDetail.getInstructor().setInstructorDetail(null);
-
-            session.delete(tempInstructorDetail);
+            session.save(tempInstructor);
 
             // commit transaction
             session.getTransaction().commit();
