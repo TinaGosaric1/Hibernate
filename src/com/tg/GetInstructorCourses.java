@@ -25,15 +25,15 @@ public class GetInstructorCourses {
             int theId = 1;
             Instructor tempInstructor = session.get(Instructor.class, theId);
 
-            System.out.println("Instructor: " + tempInstructor);
+            System.out.println("me: Instructor: " + tempInstructor);
 
             // get courses for the instructor
-            System.out.println("Courses: " + tempInstructor.getCourses());
+            System.out.println("me: Courses: " + tempInstructor.getCourses());
 
             // commit transaction
             session.getTransaction().commit();
 
-            System.out.println("Done!");
+            System.out.println("me: Done!");
         } catch (Exception exc) {
             exc.printStackTrace();
         } finally {
